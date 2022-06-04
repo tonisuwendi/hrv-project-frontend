@@ -61,7 +61,7 @@
 
         if (tokenStorage !== null && tokenStorage !== '') {
             $.ajax({
-                url: 'http://localhost/hrvbe/verify_token.php',
+                url: 'https://7be1-182-1-104-237.ap.ngrok.io/hrvbe/verify_token.php',
                 method: 'POST',
                 data: JSON.stringify({
                     token: `Bearer ${tokenStorage}`,
@@ -98,7 +98,7 @@
             $("#btnLogin").text('LOADING...');
 
             $.ajax({
-                url: 'http://localhost/hrvbe/login.php',
+                url: 'https://7be1-182-1-104-237.ap.ngrok.io/hrvbe/login.php',
                 method: 'POST',
                 data: JSON.stringify({
                     username,
