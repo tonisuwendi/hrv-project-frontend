@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>Register Dokter - HRV</title>
+</head>
+
+<body>
+
+    <div class="wrapper pb-5">
+        <img src="images/logo.png" alt="logo HRV" class="logo-hrv">
+        <div class="row mr-0">
+            <div class="col-md-4 mx-auto">
+                <h3>HEART RATE VARIABILITY</h3>
+                <h4>Buat Akun Anda</h4>
+                <form autocomplete="off" class="mt-4" onsubmit="registerHandler(event)">
+                    <div class="form-group">
+                        <input type="text" placeholder="Nama" id="name" class="form-control">
+                        <small id="nameError" class="text-danger d-none bg-light badge"></small>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Usia" id="age" class="form-control">
+                        <small id="ageError" class="text-danger d-none bg-light badge"></small>
+                    </div>
+                    <div class="form-group">
+                        <select id="gender" class="form-control">
+                            <option value="" selected disabled>Jenis Kelamin</option>
+                            <option value="1">Laki-laki</option>
+                            <option value="2">Perempuan</option>
+                        </select>
+                        <small id="genderError" class="text-danger d-none bg-light badge"></small>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Profesi" id="profession" class="form-control">
+                        <small id="professionError" class="text-danger d-none bg-light badge"></small>
+                    </div>
+                    <div class="form-group mt-4">
+                        <label for="password" class="text-danger">Buat Password Akun Anda!</label>
+                        <input type="password" id="password" class="form-control">
+                        <small id="passwordError" class="text-danger d-none bg-light badge"></small>
+                    </div>
+                    <div class="form-group mt-4">
+                        <label for="confirmPassword" class="text-danger">Ulangi Password!</label>
+                        <input type="password" id="confirmPassword" class="form-control">
+                        <small id="confirmPasswordError" class="text-danger d-none bg-light badge"></small>
+                    </div>
+                    <div class="mb-3">
+                        <span class="text-white">Jika sudah miliki akun, silahkan masuk <a href="login.html"
+                                class="text-dark">disini</a></span>
+                    </div>
+                    <button type="submit" id="btnRegister"
+                        class="btn button-green py-2 float-right mt-2 px-5">DAFTAR</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script>
+
+        const tokenStorage = localStorage.getItem('hrvfe_token');
+
+        if (tokenStorage !== null && tokenStorage !== '') {
+            $.ajax({
+                url: 'http://localhost/hrvbe/verify_token.php',
+                method: 'POST',
+                data: JSON.stringify({
+                    token: `Bearer ${tokenStorage}`,
+                }),
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        window.location.href = '/';
+                    }
+                },
+            })
+        }
+
+        function registerHandler(event) {
+            event.preventDefault();
+
+            $("#nameError").addClass('d-none');
+            $("#ageError").addClass('d-none');
+            $("#genderError").addClass('d-none');
+            $("#professionError").addClass('d-none');
+            $("#passwordError").addClass('d-none');
+            $("#confirmPasswordError").addClass('d-none');
+
+            const name = $("#name").val();
+            const age = $("#age").val();
+            const gender = $("#gender").val();
+            const profession = $("#profession").val();
+            const password = $("#password").val();
+            const confirmPassword = $("#confirmPassword").val();
+
+            if (password !== confirmPassword) {
+                $("#confirmPasswordError").removeClass('d-none');
+                $("#confirmPasswordError").text('Konfirmasi password tidak sama.');
+                return;
+            }
+
+            $("#btnRegister").prop('disabled', true);
+            $("#btnRegister").text('LOADING...');
+
+            $.ajax({
+                url: 'http://localhost/hrvbe/register.php',
+                method: 'POST',
+                data: JSON.stringify({
+                    name,
+                    age: age,
+                    gender: gender,
+                    profession,
+                    password,
+                }),
+                dataType: 'json',
+                success: function (response) {
+                    $("#btnRegister").prop('disabled', false);
+                    $("#btnRegister").text('DAFTAR');
+                    if (response.success) {
+                        sessionStorage.setItem('register_successfully', response.username);
+                        window.location.href = '/login.html';
+                    } else {
+                        if (response.name) {
+                            $("#nameError").removeClass('d-none');
+                            $("#nameError").text(response.name);
+                        }
+                        if (response.age) {
+                            $("#ageError").removeClass('d-none');
+                            $("#ageError").text(response.age);
+                        }
+                        if (response.gender) {
+                            $("#genderError").removeClass('d-none');
+                            $("#genderError").text(response.gender);
+                        }
+                        if (response.profession) {
+                            $("#professionError").removeClass('d-none');
+                            $("#professionError").text(response.profession);
+                        }
+                        if (response.password) {
+                            $("#passwordError").removeClass('d-none');
+                            $("#passwordError").text(response.password);
+                        }
+                    }
+                }
+            })
+        }
+
+    </script>
+
+</body>
+
+</html>

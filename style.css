@@ -1,0 +1,241 @@
+.logo-hrv {
+    margin-top: 30px;
+    margin-left: 40px;
+    width: 200px;
+}
+
+.wrapper {
+    background: radial-gradient(168.68% 111.66% at 53.33% 49.94%, rgba(66, 124, 121, 0.98) 0%, rgba(100, 143, 140, 0.72479) 26.04%, rgba(196, 196, 196, 0) 100%);
+    min-height: 100vh;
+    width: 100%;
+}
+
+.button-green {
+    color: black;
+    background-color: #6BEE4B;
+    border-radius: 8px;
+}
+
+.button-green:hover,
+.button-green:active,
+.button-green:focus {
+    background-color: #47d823;
+}
+
+.button-grey-custom {
+    color: black;
+    background-color: #D8DBD8;
+    border-radius: 8px;
+    font-size: 15px;
+    padding: 8px 25px;
+    margin-left: 10px;
+}
+
+.button-grey-custom:hover,
+.button-grey-custom:active,
+.button-grey-custom:focus {
+    background-color: #b2b8b2;
+}
+
+.section-top-right {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 30px;
+    top: 30px;
+}
+
+.dashboard-menu {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 15px 20px;
+}
+
+.dashboard-menu .menu-item {
+    color: white;
+    font-size: 14px;
+    margin: 0 10px;
+}
+
+.section-top-right .greeting {
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.content {
+    margin-top: 50px;
+}
+
+.content .form {
+    margin: auto;
+    margin-top: 30px;
+    width: 400px;
+}
+
+.content .main-content {
+    margin: auto;
+    margin-top: 40px;
+    width: 1000px;
+}
+
+.content .main-content .info {
+    color: white;
+    font-size: 14px;
+    text-align: center;
+}
+
+.content .main-content .input-file-controls {
+    gap: 50px;
+    display: flex;
+}
+
+.content .result-process {
+    background-color: white;
+    margin: auto;
+    margin-top: 20px;
+    padding: 20px;
+    width: 1000px;
+}
+
+.content .result-process .button-controls {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.content .result-process .button-controls button {
+    background-color: #B2D8D8;
+    color: black;
+    height: 40px;
+    width: 180px;
+}
+
+.content .result-process .button-controls button:hover {
+    background-color: #8ac1c1;
+}
+
+.content .result-process .data {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.content .result-process .footer-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+@media screen and (max-width: 700px) {
+    .logo-hrv {
+        margin-top: 10px;
+        margin-left: 10px;
+        width: 120px;
+    }
+
+    .section-top-right {
+        right: 20px;
+        top: 60px;
+    }
+
+    .dashboard-menu {
+        padding: 10px;
+    }
+
+    .dashboard-menu .menu-item {
+        font-size: 12px;
+    }
+
+    .section-top-right .greeting {
+        font-size: 15px;
+    }
+
+    .content {
+        margin-top: 130px;
+    }
+
+    .content .main-title {
+        font-size: 20px;
+    }
+
+    .content .form {
+        margin: auto;
+        margin-top: 30px;
+        width: 90%;
+    }
+
+    .content .form .form-group {
+        margin-bottom: 0;
+    }
+
+    .content .main-content {
+        margin: auto;
+        margin-top: 40px;
+        width: 90%;
+    }
+
+    .content .main-content .input-file-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .content .result-process {
+        padding: 10px;
+        width: 95%;
+    }
+
+    .content .result-process .button-controls {
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+        display: grid;
+    }
+
+    .content .result-process .button-controls button {
+        font-size: 13px;
+        height: 30px;
+        width: 100%;
+    }
+
+    .content .data img {
+        width: 90%;
+    }
+
+}
+
+.lds-hourglass {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    transform: translate(-50%, 0);
+    left: 50%;
+}
+
+.lds-hourglass:after {
+    content: " ";
+    display: block;
+    border-radius: 50%;
+    width: 0;
+    height: 0;
+    margin: 8px;
+    box-sizing: border-box;
+    border: 32px solid #333;
+    border-color: #333 transparent #333 transparent;
+    animation: lds-hourglass 1.2s infinite;
+}
+
+@keyframes lds-hourglass {
+    0% {
+        transform: rotate(0);
+        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+
+    50% {
+        transform: rotate(900deg);
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    100% {
+        transform: rotate(1800deg);
+    }
+}

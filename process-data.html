@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>Proses Data - HRV</title>
+</head>
+
+<body>
+
+    <div class="wrapper pb-5">
+        <img src="images/logo.png" alt="logo HRV" class="navbar-brand logo-hrv">
+        <div class="section-top-right">
+            <div class="dashboard-menu">
+                <a href="/" class="menu-item">Home</a>
+                <a href="/process-data.html" class="menu-item font-weight-bold">Proses Data</a>
+                <a href="/search.html" class="menu-item">Cari Data</a>
+                <a href="/help.html" class="menu-item">Help</a>
+                <a href="/logout.html" class="menu-item text-warning">Logout</a>
+            </div>
+            <span class="greeting">Halo,Selamat datang User!</span>
+        </div>
+
+        <div class="content">
+            <h3 class="text-center main-title">HEART RATE VARIABILITY</h3>
+            <div class="form">
+                <div class="form-group row">
+                    <label for="name" class="col-sm-2 col-form-label">Nama</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="name">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="age" class="col-sm-2 col-form-label">Umur</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="age">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="gender" class="col-sm-2 col-form-label">Gender</label>
+                    <div class="col-sm-10">
+                        <select id="gender" class="form-control">
+                            <option value="" selected disabled>Pilih salah satu</option>
+                            <option value="1">Laki-laki</option>
+                            <option value="2">Perempuan</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="main-content">
+                <p class="info">Masukan data rekam jantung anak sebelum menggunakan gadget, saat menggunakan gadget dan setelah menggunakan gadget!</p>
+                <div class="input-file-controls">
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="filePre">
+                            <label class="custom-file-label" for="filePre">File Pre (CSV)</label>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="fileOn">
+                            <label class="custom-file-label" for="fileOn">File On (CSV)</label>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="filePost">
+                            <label class="custom-file-label" for="filePost">File Post (CSV)</label>
+                        </div>
+                    </div>
+                    <button class="btn button-green px-5">PROSES</button>
+                </div>
+            </div>
+            <div class="result-process">
+                <div class="button-controls">
+                    <button class="btn">PRE</button>
+                    <button class="btn">ON</button>
+                    <button class="btn">POST</button>
+                    <button class="btn">MULTICAL</button>
+                </div>
+                <div class="data">
+                    <img src="images/dummy-result.png" class="dummy" alt="dummy result">
+                </div>
+                <div class="footer-content mt-4">
+                    <div></div>
+                    <div class="footer-button">
+                        <button class="btn button-grey-custom">BATAL</button>
+                        <button class="btn button-grey-custom">SIMPAN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script>
+
+        const tokenStorage = localStorage.getItem('hrvfe_token');
+
+        if (tokenStorage === null || tokenStorage === '') {
+            window.location.href = '/login.html';
+        }
+
+        $.ajax({
+            url: 'http://localhost/hrvbe/verify_token.php',
+            method: 'POST',
+            data: JSON.stringify({
+                token: `Bearer ${tokenStorage}`,
+            }),
+            dataType: 'json',
+            success: function (response) {
+                if (!response.success) {
+                    window.location.href = '/login.html';
+                }
+            },
+            error: function () {
+                window.location.href = '/login.html';
+            }
+        })
+
+
+    </script>
+
+</body>
+
+</html>

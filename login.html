@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>Login Dokter - HRV</title>
+</head>
+
+<body>
+
+    <div class="wrapper pb-5">
+        <img src="images/logo.png" alt="logo HRV" class="logo-hrv">
+        <div class="row mr-0">
+            <div class="col-md-4 mx-auto">
+                <h3 class="text-center">HEART RATE VARIABILITY</h3>
+                <h4 class="text-center mt-5">Silahkan Login!</h4>
+                <div id="alertSuccess" class="alert alert-success mt-2 d-none"></div>
+                <div id="alertDanger" class="alert alert-danger mt-2 d-none"></div>
+                <form autocomplete="off" class="mt-4" onsubmit="loginHandler(event)">
+                    <div class="form-group">
+                        <input type="text" placeholder="Username" id="username" class="form-control text-center">
+                        <small id="usernameError" class="text-danger d-none bg-light badge"></small>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Password" id="password" class="form-control text-center">
+                        <small id="passwordError" class="text-danger d-none bg-light badge"></small>
+                    </div>
+                    <div class="mb-3">
+                        <span class="text-white">Jika belum miliki akun, silahkan daftar <a href="register.html"
+                                class="text-dark">disini</a></span>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" id="btnLogin" class="btn button-green py-2 mt-2 px-5">MASUK</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script>
+
+        const tokenStorage = localStorage.getItem('hrvfe_token');
+
+        if (tokenStorage !== null && tokenStorage !== '') {
+            $.ajax({
+                url: 'http://localhost/hrvbe/verify_token.php',
+                method: 'POST',
+                data: JSON.stringify({
+                    token: `Bearer ${tokenStorage}`,
+                }),
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        window.location.href = '/';
+                    }
+                },
+            })
+        }
+
+        const registerSuccessfully = sessionStorage.getItem('register_successfully');
+
+        sessionStorage.removeItem('register_successfully');
+
+        if (registerSuccessfully) {
+            $("#alertSuccess").removeClass('d-none');
+            $("#alertSuccess").html(`Selamat, pendaftaran berhasil dilakukan. Silakan login menggunakan username dan password yang sudah Anda buat. Username Anda adalah <strong>${registerSuccessfully}</strong>`);
+        }
+
+        function loginHandler(event) {
+            event.preventDefault();
+
+            $("#usernameError").addClass('d-none');
+            $("#passwordError").addClass('d-none');
+            $("#alertDanger").addClass('d-none');
+
+            const username = $("#username").val();
+            const password = $("#password").val();
+
+            $("#btnLogin").prop('disabled', true);
+            $("#btnLogin").text('LOADING...');
+
+            $.ajax({
+                url: 'http://localhost/hrvbe/login.php',
+                method: 'POST',
+                data: JSON.stringify({
+                    username,
+                    password,
+                }),
+                dataType: 'json',
+                success: function (response) {
+                    $("#btnLogin").prop('disabled', false);
+                    $("#btnLogin").text('MASUK');
+                    if (response.success) {
+                        localStorage.setItem('hrvfe_token', response.token);
+                        window.location.href = '/';
+                    } else {
+                        if (response.username) {
+                            $("#usernameError").removeClass('d-none');
+                            $("#usernameError").text(response.username);
+                        }
+                        if (response.password) {
+                            $("#passwordError").removeClass('d-none');
+                            $("#passwordError").text(response.password);
+                        }
+                        if (response.message) {
+                            $("#alertDanger").removeClass('d-none');
+                            $("#alertDanger").text(response.message);
+                        }
+                    }
+                }
+            })
+        }
+
+
+    </script>
+
+</body>
+
+</html>
