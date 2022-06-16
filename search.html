@@ -87,7 +87,7 @@
         }
 
         $.ajax({
-            url: 'https://7be1-182-1-104-237.ap.ngrok.io/hrvbe/verify_token.php',
+            url: 'https://044c-182-1-126-197.ap.ngrok.io/hrvbe/verify_token.php',
             method: 'POST',
             data: JSON.stringify({
                 token: `Bearer ${tokenStorage}`,
@@ -112,7 +112,7 @@
             $(".lds-hourglass").removeClass('d-none');
 
             $.ajax({
-                url: `https://7be1-182-1-104-237.ap.ngrok.io/hrvbe/search.php?keyword=${value}`,
+                url: `https://044c-182-1-126-197.ap.ngrok.io/hrvbe/search.php?keyword=${value}`,
                 method: 'GET',
                 dataType: 'json',
                 success: function (response) {
@@ -122,22 +122,27 @@
                         if (response.success) {
                             let resultHtml = '';
                             response.data.map((data, index) => {
+                                console.log(data.date);
+                                const dateFormatted = new Intl.DateTimeFormat('id-ID', {
+                                    dateStyle: 'medium',
+                                    timeStyle: 'long',
+                                }).format(new Date(data.date));
                                 resultHtml += `<tr>
                                     <td>${index + 1}</td/>
                                     <td>${data.name}</td>
                                     <td>${data.age}</td>
                                     <td>${data.gender}</td>
-                                    <td>${data.date}</td>
+                                    <td>${dateFormatted}</td>
                                     <td><button class="btn button-green btn-sm px-3">Lihat</button></td>
                                     </tr>`;
                             });
                             $("#resultBody").html(resultHtml);
-                            $('.data-table').DataTable({
-                                searching: false,
-                                paging: false,
-                                bInfo: false,
-                                bDestroy: true,
-                            });
+                            // $('.data-table').DataTable({
+                            //     searching: false,
+                            //     paging: false,
+                            //     bInfo: false,
+                            //     bDestroy: true,
+                            // });
                         } else {
                             alert('Terjadi kesalahan tak terduga, silakan refresh browser Anda.')
                         }
