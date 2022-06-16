@@ -30,103 +30,225 @@
             <span class="greeting">Halo,Selamat datang User!</span>
         </div>
 
-        <form onsubmit="handleSubmitData(event)" class="d-flex">
-            <div class="content">
-                <h3 class="text-center main-title">HEART RATE VARIABILITY</h3>
-                <div class="form">
-                    <div class="form-group row">
-                        <label for="name" class="col-sm-2 col-form-label">Nama</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="name" required>
+        <div class="content">
+            <h3 class="text-center main-title">HEART RATE VARIABILITY</h3>
+            <div class="form">
+                <div class="form-group row">
+                    <label for="name" class="col-sm-2 col-form-label">Nama</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="age" class="col-sm-2 col-form-label">Umur</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="age" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="gender" class="col-sm-2 col-form-label">Gender</label>
+                    <div class="col-sm-10">
+                        <select id="gender" class="form-control" required>
+                            <option value="" selected disabled>Pilih salah satu</option>
+                            <option value="1">Laki-laki</option>
+                            <option value="2">Perempuan</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="main-content">
+                <p class="info">Masukan data rekam jantung anak sebelum menggunakan gadget, saat menggunakan gadget
+                    dan
+                    setelah menggunakan gadget!</p>
+            </div>
+            <div class="card result-process">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <button type="button" class="nav-link button-type-single-data btn active"
+                            onclick="changeDataType('single')">Single Data</button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="nav-link button-type-multi-data btn"
+                            onclick="changeDataType('multi')">Multi
+                            Data</button>
+                    </li>
+                </ul>
+                <div class="card-body" id="proccessWrapperSingleData">
+                    <div class="d-flex">
+                        <div class="input-group mr-3" style="width: 300px;">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputFile" required>
+                                <label class="custom-file-label" for="inputFile">Input Data</label>
+                            </div>
+                        </div>
+                        <button onclick="handleSubmitData()" type="button"
+                            class="btn button-green buttonProccess px-5">PROSES</button>
+                    </div>
+                    <hr>
+                    <div class="alert alert-info alertInfoBeforeInputFile">Silakan input file untuk melihat
+                        data.</div>
+                    <div class="card-body normalPeak peak-wrapper" style="display: none">
+                        <h4 class="text-center">Cek Peak</h4>
+                        <div id="data1"></div>
+                        <button id="buttonDownloadData1" class="btn btn-secondary">Download</button>
+                        <br />
+                        <br />
+                        <hr />
+                        <div>
+                            <h4 class="text-center">Peak Detection</h4>
+                            <div id="data2"></div>
+                            <button id="buttonDownloadData2" class="btn btn-secondary">Download</button>
+                        </div>
+                        <br />
+                        <br />
+                        <hr />
+                        <div>
+                            <h4 class="text-center">Plot Rri</h4>
+                            <div id="data3"></div>
+                            <button id="buttonDownloadData3" class="btn btn-secondary">Download Gambar</button>
+                            <a href="" target="_blank" id="buttonDownloadData3b" class="btn btn-secondary">Download
+                                Data</a>
+                        </div>
+                        <br />
+                        <br />
+                        <hr />
+                        <div>
+                            <h4 class="text-center">Point Care Plot Single</h4>
+                            <div id="data4"></div>
+                            <button id="buttonDownloadData4" class="btn btn-secondary">Download</button>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="age" class="col-sm-2 col-form-label">Umur</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="age" required>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="gender" class="col-sm-2 col-form-label">Gender</label>
-                        <div class="col-sm-10">
-                            <select id="gender" class="form-control" required>
-                                <option value="" selected disabled>Pilih salah satu</option>
-                                <option value="1">Laki-laki</option>
-                                <option value="2">Perempuan</option>
-                            </select>
+                    <div class="footer-content mt-4">
+                        <div></div>
+                        <div class="footer-button">
+                            <button class="btn button-grey-custom">SIMPAN SEMUA</button>
                         </div>
                     </div>
                 </div>
-                <div class="main-content">
-                    <p class="info">Masukan data rekam jantung anak sebelum menggunakan gadget, saat menggunakan gadget
-                        dan
-                        setelah menggunakan gadget!</p>
-                </div>
-                <div class="card result-process">
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <button type="button" class="nav-link button-type-single-data btn active"
-                                onclick="changeDataType('single')">Single Data</button>
-                        </li>
-                        <li class="nav-item">
-                            <button type="button" class="nav-link button-type-multi-data btn" onclick="changeDataType('multi')">Multi
-                                Data</button>
-                        </li>
-                    </ul>
-                    <div class="card-body result-process">
-                        <div class="d-flex">
-                            <div class="input-group mr-3" style="width: 300px;">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="inputFile" required>
-                                    <label class="custom-file-label" for="inputFile">Input Data</label>
-                                </div>
-                            </div>
-                            <button type="submit" id="buttonProccess" class="btn button-green px-5">PROSES</button>
-                        </div>
-                        <hr>
-                        <div class="alert alert-info" id="alertInfoBeforeInputFile">Silakan input file untuk melihat
-                            data.</div>
-                        <div id="normalPeak" class="card-body peak-wrapper" style="display: none">
-                            <h4 class="text-center">Cek Peak</h4>
-                            <div id="data1"></div>
-                            <button id="buttonDownloadData1" class="btn btn-secondary">Download</button>
-                            <br />
-                            <br />
-                            <hr />
-                            <div>
-                                <h4 class="text-center">Peak Detection</h4>
-                                <div id="data2"></div>
-                                <button id="buttonDownloadData2" class="btn btn-secondary">Download</button>
-                            </div>
-                            <br />
-                            <br />
-                            <hr />
-                            <div>
-                                <h4 class="text-center">Plot Rri</h4>
-                                <div id="data3"></div>
-                                <button id="buttonDownloadData3" class="btn btn-secondary">Download Gambar</button>
-                                <a href="" target="_blank" id="buttonDownloadData3b" class="btn btn-secondary">Download Data</a>
-                            </div>
-                            <br />
-                            <br />
-                            <hr />
-                            <div>
-                                <h4 class="text-center">Point Care Plot Single</h4>
-                                <div id="data4"></div>
-                                <button id="buttonDownloadData4" class="btn btn-secondary">Download</button>
+                <div class="card-body" id="proccessWrapperMultiData">
+                    <div class="d-flex">
+                        <div class="input-group mr-3" style="width: 300px;">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputFilePre" required>
+                                <label class="custom-file-label" for="inputFilePre">Input Data Pre</label>
                             </div>
                         </div>
-                        <div class="footer-content mt-4">
-                            <div></div>
-                            <div class="footer-button">
-                                <button class="btn button-grey-custom">BATAL</button>
-                                <button class="btn button-grey-custom">SIMPAN</button>
+                        <div class="input-group mr-3" style="width: 300px;">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputFileOn" required>
+                                <label class="custom-file-label" for="inputFileOn">Input Data On</label>
                             </div>
+                        </div>
+                        <div class="input-group mr-3" style="width: 300px;">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputFilePost" required>
+                                <label class="custom-file-label" for="inputFilePost">Input Data Post</label>
+                            </div>
+                        </div>
+                        <button onclick="handleSubmitData()" type="button"
+                            class="btn button-green buttonProccess px-5">PROSES</button>
+                    </div>
+                    <hr>
+                    <div class="alert alert-info alertInfoBeforeInputFile">Silakan input 3 file untuk melihat
+                        data.</div>
+                    <div class="card-body normalPeak peak-wrapper" style="display: none">
+                        <h4 class="text-center">Cek Peak Data 1 atau nama datanya</h4>
+                        <div id="data1a"></div>
+                        <button id="buttonDownloadData1a" class="btn btn-secondary">Download</button>
+                        <br />
+                        <br />
+                        <hr />
+                        <h4 class="text-center">Cek Peak Data 2 atau nama datanya</h4>
+                        <div id="data1b"></div>
+                        <button id="buttonDownloadData1b" class="btn btn-secondary">Download</button>
+                        <br />
+                        <br />
+                        <hr />
+                        <h4 class="text-center">Cek Peak Data 3 atau nama datanya</h4>
+                        <div id="data1c"></div>
+                        <button id="buttonDownloadData1c" class="btn btn-secondary">Download</button>
+                        <br />
+                        <br />
+                        <hr />
+                        <div>
+                            <h4 class="text-center">Peak Detection 1 atau nama datanya</h4>
+                            <div id="data2a"></div>
+                            <button id="buttonDownloadData2a" class="btn btn-secondary">Download</button>
+                        </div>
+                        <br />
+                        <br />
+                        <hr />
+                        <div>
+                            <h4 class="text-center">Peak Detection 2 atau nama datanya</h4>
+                            <div id="data2b"></div>
+                            <button id="buttonDownloadData2b" class="btn btn-secondary">Download</button>
+                        </div>
+                        <br />
+                        <br />
+                        <hr />
+                        <div>
+                            <h4 class="text-center">Peak Detection 3 atau nama datanya</h4>
+                            <div id="data2c"></div>
+                            <button id="buttonDownloadData2c" class="btn btn-secondary">Download</button>
+                        </div>
+                        <br />
+                        <br />
+                        <hr />
+                        <div>
+                            <h4 class="text-center">Plot Rri 1 atau nama datanya</h4>
+                            <div id="data3a"></div>
+                            <button id="buttonDownloadData3a" class="btn btn-secondary">Download Gambar</button>
+                            <a href="" target="_blank" id="buttonDownloadData3a" class="btn btn-secondary">Download
+                                Data</a>
+                        </div>
+                        <br />
+                        <br />
+                        <hr />
+                        <div>
+                            <h4 class="text-center">Plot Rri 2 atau nama datanya</h4>
+                            <div id="data3b"></div>
+                            <button id="buttonDownloadData3b" class="btn btn-secondary">Download Gambar</button>
+                            <a href="" target="_blank" id="buttonDownloadData3b" class="btn btn-secondary">Download
+                                Data</a>
+                        </div>
+                        <br />
+                        <br />
+                        <hr />
+                        <div>
+                            <h4 class="text-center">Plot Rri 3 atau nama datanya</h4>
+                            <div id="data3c"></div>
+                            <button id="buttonDownloadData3c" class="btn btn-secondary">Download Gambar</button>
+                            <a href="" target="_blank" id="buttonDownloadData3c" class="btn btn-secondary">Download
+                                Data</a>
+                        </div>
+                        <br />
+                        <br />
+                        <hr />
+                        <div>
+                            <h4 class="text-center">Point Care Plot Single 1 atau nama datanya</h4>
+                            <div id="data4a"></div>
+                            <button id="buttonDownloadData4a" class="btn btn-secondary">Download</button>
+                        </div>
+                        <div>
+                            <h4 class="text-center">Point Care Plot Single 2 atau nama datanya</h4>
+                            <div id="data4b"></div>
+                            <button id="buttonDownloadData4b" class="btn btn-secondary">Download</button>
+                        </div>
+                        <div>
+                            <h4 class="text-center">Point Care Plot Single 3 atau nama datanya</h4>
+                            <div id="data4c"></div>
+                            <button id="buttonDownloadData4c" class="btn btn-secondary">Download</button>
+                        </div>
+                    </div>
+                    <div class="footer-content mt-4">
+                        <div></div>
+                        <div class="footer-button">
+                            <button class="btn button-grey-custom">SIMPAN SEMUA</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 
 
@@ -149,7 +271,7 @@
         }
 
         $.ajax({
-            url: 'https://044c-182-1-126-197.ap.ngrok.io/hrvbe/verify_token.php',
+            url: 'https://0a01-182-1-104-217.ap.ngrok.io/hrvbe/verify_token.php',
             method: 'POST',
             data: JSON.stringify({
                 token: `Bearer ${tokenStorage}`,
@@ -168,58 +290,126 @@
         // process data
 
         let globalVariableDataType = 'single';
+        const GLOBAL_VARIABLE_INPUT_MULTIPLE_FILE = [$("#inputFileOn").prop('files')[0], $("#inputFilePost").prop('files')[0]];
+        const GLOBAL_VARIABLE_DATA_CEK_PEAK = [];
+        const GLOBAL_VARIABLE_DATA_PEAK_DETECTION = [];
+        const GLOBAL_VARIABLE_DATA_PLOT_RRI = [];
+        const GLOBAL_VARIABLE_DATA_POINT_CARE = [];
 
         function changeDataType(type) {
             globalVariableDataType = type;
             $('.button-type-single-data').removeClass('active');
             $('.button-type-multi-data').removeClass('active');
             $(`.button-type-${type}-data`).addClass('active');
+            if (type === 'single') {
+                $("#proccessWrapperMultiData").hide();
+                $("#proccessWrapperSingleData").show();
+            } else {
+                $("#proccessWrapperSingleData").hide();
+                $("#proccessWrapperMultiData").show();
+            }
         }
 
-        function handleSubmitData(event) {
-            event.preventDefault();
-
-            $("#buttonProccess").prop('disabled', true);
-            $("#buttonProccess").text('Loading...');
+        function handleSubmitData() {
+            $(".buttonProccess").prop('disabled', true);
+            $(".buttonProccess").text('Loading...');
 
             const name = $("#name").val();
             const age = $("#age").val();
             const gender = $("#gender").val();
             const inputFile = $("#inputFile").prop('files')[0];
+            const inputFilePre = $("#inputFilePre").prop('files')[0];
 
             const formData = new FormData();
             formData.append('name', name);
             formData.append('age', age);
             formData.append('gender', gender);
-            formData.append('file', inputFile);
+            if (globalVariableDataType === 'single') {
+                formData.append('file', inputFile);
+                handleSubmitSingleData(formData);
+            } else {
+                handleSubmitMultiData(name, age, gender, inputFilePre);
+            }
+        }
 
+        function handleSubmitSingleData(formData) {
             $.ajax({
-                url: 'https://faa3-182-253-183-8.ap.ngrok.io/upload',
+                url: 'https://d08e-182-253-183-58.ap.ngrok.io/upload',
                 method: 'POST',
                 data: formData,
                 contentType: false,
                 processData: false,
                 dataType: 'json',
                 success: function (response) {
-                    $("#buttonProccess").prop('disabled', false);
-                    $("#buttonProccess").text('PROSES');
+                    $(".buttonProccess").prop('disabled', false);
+                    $(".buttonProccess").text('PROSES');
                     if (response.success) {
-                        $("#alertInfoBeforeInputFile").hide();
-                        $("#normalPeak").show();
+                        $(".alertInfoBeforeInputFile").hide();
+                        $(".normalPeak").show();
                         $('#data1').html(response.pCeak);
                         $('#data2').html(response.pDetection);
                         $('#data3').html(response.pRri);
                         $('#data4').html(response.pSingle);
-                        $("#buttonDownloadData1").attr('onclick', `downloadImage('https://faa3-182-253-183-8.ap.ngrok.io/${response.fileCeakPeak}', 'Cek Peak')`);
-                        $("#buttonDownloadData2").attr('onclick', `downloadImage('https://faa3-182-253-183-8.ap.ngrok.io/${response.filePeakDetection}', 'Peak Detection')`);
-                        $("#buttonDownloadData3").attr('onclick', `downloadImage('https://faa3-182-253-183-8.ap.ngrok.io/${response.filePlotRri}', 'Plot Rri')`);
-                        $("#buttonDownloadData3b").prop('href', `https://faa3-182-253-183-8.ap.ngrok.io/${response.rrResult}`);
-                        $("#buttonDownloadData4").attr('onclick', `downloadImage('https://faa3-182-253-183-8.ap.ngrok.io/${response.filePointCarePlot}', 'Point Care Plot Single')`);
+                        $("#buttonDownloadData1").attr('onclick', `downloadImage('https://d08e-182-253-183-58.ap.ngrok.io/${response.fileCeakPeak}', 'Cek Peak')`);
+                        $("#buttonDownloadData2").attr('onclick', `downloadImage('https://d08e-182-253-183-58.ap.ngrok.io/${response.filePeakDetection}', 'Peak Detection')`);
+                        $("#buttonDownloadData3").attr('onclick', `downloadImage('https://d08e-182-253-183-58.ap.ngrok.io/${response.filePlotRri}', 'Plot Rri')`);
+                        $("#buttonDownloadData3b").prop('href', `https://d08e-182-253-183-58.ap.ngrok.io/${response.rrResult}`);
+                        $("#buttonDownloadData4").attr('onclick', `downloadImage('https://d08e-182-253-183-58.ap.ngrok.io/${response.filePointCarePlot}', 'Point Care Plot Single')`);
                     } else {
                         swal({
                             text: response.msg,
                             icon: 'error',
                         });
+                    }
+                }
+            })
+        }
+
+        function handleSubmitMultiData(name, age, gender, file) {
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('age', age);
+            formData.append('gender', gender);
+            formData.append('file', file);
+            $.ajax({
+                url: 'https://d08e-182-253-183-58.ap.ngrok.io/upload',
+                method: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function (response) {
+                    if (GLOBAL_VARIABLE_DATA_CEK_PEAK.length < 3) {
+                        GLOBAL_VARIABLE_DATA_CEK_PEAK.push(response.pCeak);
+                        GLOBAL_VARIABLE_DATA_PEAK_DETECTION.push(response.pDetection);
+                        GLOBAL_VARIABLE_DATA_PLOT_RRI.push(response.pRri);
+                        GLOBAL_VARIABLE_DATA_POINT_CARE.push(response.pSingle);
+                        if (GLOBAL_VARIABLE_DATA_CEK_PEAK.length === 1) {
+                            handleSubmitData(name, age, gender, $("#inputFileOn").prop('files')[0]);
+                        } else {
+                            handleSubmitData(name, age, gender, $("#inputFilePost").prop('files')[0]);
+                        }
+                    } else {
+                        $(".buttonProccess").prop('disabled', false);
+                        $(".buttonProccess").text('PROSES');
+                        $(".alertInfoBeforeInputFile").hide();
+                        $(".normalPeak").show();
+                        $('#data1a').html(GLOBAL_VARIABLE_DATA_CEK_PEAK[0]);
+                        $('#data1b').html(GLOBAL_VARIABLE_DATA_CEK_PEAK[1]);
+                        $('#data1c').html(GLOBAL_VARIABLE_DATA_CEK_PEAK[2]);
+                        $('#data2a').html(GLOBAL_VARIABLE_DATA_PEAK_DETECTION[0]);
+                        $('#data2b').html(GLOBAL_VARIABLE_DATA_PEAK_DETECTION[1]);
+                        $('#data2c').html(GLOBAL_VARIABLE_DATA_PEAK_DETECTION[2]);
+                        $('#data3a').html(GLOBAL_VARIABLE_DATA_PLOT_RRI[0]);
+                        $('#data3b').html(GLOBAL_VARIABLE_DATA_PLOT_RRI[1]);
+                        $('#data3c').html(GLOBAL_VARIABLE_DATA_PLOT_RRI[2]);
+                        $('#data4a').html(GLOBAL_VARIABLE_DATA_POINT_CARE[0]);
+                        $('#data4b').html(GLOBAL_VARIABLE_DATA_POINT_CARE[1]);
+                        $('#data4c').html(GLOBAL_VARIABLE_DATA_POINT_CARE[2]);
+                        console.log(GLOBAL_VARIABLE_DATA_CEK_PEAK);
+                        console.log(GLOBAL_VARIABLE_DATA_PEAK_DETECTION);
+                        console.log(GLOBAL_VARIABLE_DATA_PLOT_RRI);
+                        console.log(GLOBAL_VARIABLE_DATA_POINT_CARE);
                     }
                 }
             })

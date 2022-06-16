@@ -126,6 +126,10 @@
     justify-content: space-between;
 }
 
+#proccessWrapperMultiData {
+    display: none;
+}
+
 @media screen and (max-width: 700px) {
     .logo-hrv {
         margin-top: 10px;
