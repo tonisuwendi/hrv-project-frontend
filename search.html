@@ -87,7 +87,7 @@
         }
 
         $.ajax({
-            url: 'https://0a01-182-1-104-217.ap.ngrok.io/hrvbe/verify_token.php',
+            url: 'https://0dd6-182-1-99-104.ap.ngrok.io/hrvbe/verify_token.php',
             method: 'POST',
             data: JSON.stringify({
                 token: `Bearer ${tokenStorage}`,
@@ -112,7 +112,7 @@
             $(".lds-hourglass").removeClass('d-none');
 
             $.ajax({
-                url: `https://0a01-182-1-104-217.ap.ngrok.io/hrvbe/search.php?keyword=${value}`,
+                url: `https://0dd6-182-1-99-104.ap.ngrok.io/hrvbe/search.php?keyword=${value}`,
                 method: 'GET',
                 dataType: 'json',
                 success: function (response) {

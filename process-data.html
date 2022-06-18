@@ -197,8 +197,8 @@
                         <div>
                             <h4 class="text-center">Plot Rri 1 atau nama datanya</h4>
                             <div id="data3a"></div>
-                            <button id="buttonDownloadData3a" class="btn btn-secondary">Download Gambar</button>
-                            <a href="" target="_blank" id="buttonDownloadData3a" class="btn btn-secondary">Download
+                            <button id="buttonDownloadData3a1" class="btn btn-secondary">Download Gambar</button>
+                            <a href="" target="_blank" id="buttonDownloadData3a2" class="btn btn-secondary">Download
                                 Data</a>
                         </div>
                         <br />
@@ -207,8 +207,8 @@
                         <div>
                             <h4 class="text-center">Plot Rri 2 atau nama datanya</h4>
                             <div id="data3b"></div>
-                            <button id="buttonDownloadData3b" class="btn btn-secondary">Download Gambar</button>
-                            <a href="" target="_blank" id="buttonDownloadData3b" class="btn btn-secondary">Download
+                            <button id="buttonDownloadData3b1" class="btn btn-secondary">Download Gambar</button>
+                            <a href="" target="_blank" id="buttonDownloadData3b2" class="btn btn-secondary">Download
                                 Data</a>
                         </div>
                         <br />
@@ -217,8 +217,8 @@
                         <div>
                             <h4 class="text-center">Plot Rri 3 atau nama datanya</h4>
                             <div id="data3c"></div>
-                            <button id="buttonDownloadData3c" class="btn btn-secondary">Download Gambar</button>
-                            <a href="" target="_blank" id="buttonDownloadData3c" class="btn btn-secondary">Download
+                            <button id="buttonDownloadData3c1" class="btn btn-secondary">Download Gambar</button>
+                            <a href="" target="_blank" id="buttonDownloadData3c2" class="btn btn-secondary">Download
                                 Data</a>
                         </div>
                         <br />
@@ -271,7 +271,7 @@
         }
 
         $.ajax({
-            url: 'https://0a01-182-1-104-217.ap.ngrok.io/hrvbe/verify_token.php',
+            url: 'https://0dd6-182-1-99-104.ap.ngrok.io/hrvbe/verify_token.php',
             method: 'POST',
             data: JSON.stringify({
                 token: `Bearer ${tokenStorage}`,
@@ -295,6 +295,11 @@
         const GLOBAL_VARIABLE_DATA_PEAK_DETECTION = [];
         const GLOBAL_VARIABLE_DATA_PLOT_RRI = [];
         const GLOBAL_VARIABLE_DATA_POINT_CARE = [];
+        const GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK = [];
+        const GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION = [];
+        const GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI = [];
+        const GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE = [];
+        const GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT = [];
 
         function changeDataType(type) {
             globalVariableDataType = type;
@@ -334,7 +339,7 @@
 
         function handleSubmitSingleData(formData) {
             $.ajax({
-                url: 'https://d08e-182-253-183-58.ap.ngrok.io/upload',
+                url: 'https://212e-182-253-183-58.ap.ngrok.io/upload',
                 method: 'POST',
                 data: formData,
                 contentType: false,
@@ -350,11 +355,11 @@
                         $('#data2').html(response.pDetection);
                         $('#data3').html(response.pRri);
                         $('#data4').html(response.pSingle);
-                        $("#buttonDownloadData1").attr('onclick', `downloadImage('https://d08e-182-253-183-58.ap.ngrok.io/${response.fileCeakPeak}', 'Cek Peak')`);
-                        $("#buttonDownloadData2").attr('onclick', `downloadImage('https://d08e-182-253-183-58.ap.ngrok.io/${response.filePeakDetection}', 'Peak Detection')`);
-                        $("#buttonDownloadData3").attr('onclick', `downloadImage('https://d08e-182-253-183-58.ap.ngrok.io/${response.filePlotRri}', 'Plot Rri')`);
-                        $("#buttonDownloadData3b").prop('href', `https://d08e-182-253-183-58.ap.ngrok.io/${response.rrResult}`);
-                        $("#buttonDownloadData4").attr('onclick', `downloadImage('https://d08e-182-253-183-58.ap.ngrok.io/${response.filePointCarePlot}', 'Point Care Plot Single')`);
+                        $("#buttonDownloadData1").attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${response.fileCeakPeak}', 'Cek Peak')`);
+                        $("#buttonDownloadData2").attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${response.filePeakDetection}', 'Peak Detection')`);
+                        $("#buttonDownloadData3").attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${response.filePlotRri}', 'Plot Rri')`);
+                        $("#buttonDownloadData3b").prop('href', `https://212e-182-253-183-58.ap.ngrok.io/${response.rrResult}`);
+                        $("#buttonDownloadData4").attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${response.filePointCarePlot}', 'Point Care Plot Single')`);
                     } else {
                         swal({
                             text: response.msg,
@@ -372,7 +377,7 @@
             formData.append('gender', gender);
             formData.append('file', file);
             $.ajax({
-                url: 'https://d08e-182-253-183-58.ap.ngrok.io/upload',
+                url: 'https://212e-182-253-183-58.ap.ngrok.io/upload',
                 method: 'POST',
                 data: formData,
                 contentType: false,
@@ -381,9 +386,14 @@
                 success: function (response) {
                     if (GLOBAL_VARIABLE_DATA_CEK_PEAK.length < 3) {
                         GLOBAL_VARIABLE_DATA_CEK_PEAK.push(response.pCeak);
+                        GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK.push(response.fileCeakPeak);
                         GLOBAL_VARIABLE_DATA_PEAK_DETECTION.push(response.pDetection);
+                        GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION.push(response.filePeakDetection);
                         GLOBAL_VARIABLE_DATA_PLOT_RRI.push(response.pRri);
+                        GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI.push(response.filePlotRri);
                         GLOBAL_VARIABLE_DATA_POINT_CARE.push(response.pSingle);
+                        GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE.push(response.filePointCarePlot);
+                        GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT.push(response.rrResult);
                         if (GLOBAL_VARIABLE_DATA_CEK_PEAK.length === 1) {
                             handleSubmitData(name, age, gender, $("#inputFileOn").prop('files')[0]);
                         } else {
@@ -406,6 +416,21 @@
                         $('#data4a').html(GLOBAL_VARIABLE_DATA_POINT_CARE[0]);
                         $('#data4b').html(GLOBAL_VARIABLE_DATA_POINT_CARE[1]);
                         $('#data4c').html(GLOBAL_VARIABLE_DATA_POINT_CARE[2]);
+                        $('#buttonDownloadData1a').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK[0]}', 'Cek Peak 1')`);
+                        $('#buttonDownloadData1b').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK[1]}', 'Cek Peak 2')`);
+                        $('#buttonDownloadData1c').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK[2]}', 'Cek Peak 3')`);
+                        $('#buttonDownloadData2a').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION[0]}', 'Peak Detection 1')`);
+                        $('#buttonDownloadData2b').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION[1]}', 'Peak Detection 2')`);
+                        $('#buttonDownloadData2c').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION[2]}', 'Peak Detection 3')`);
+                        $('#buttonDownloadData3a1').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI[0]}', 'Plot Rri 1')`);
+                        $("#buttonDownloadData3a2").prop('href', `https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT[0]}`);
+                        $('#buttonDownloadData3b1').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI[1]}', 'Plot Rri 2')`);
+                        $("#buttonDownloadData3b2").prop('href', `https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT[1]}`);
+                        $('#buttonDownloadData3c1').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI[2]}', 'Plot Rri 3')`);
+                        $("#buttonDownloadData3c2").prop('href', `https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT[2]}`);
+                        $('#buttonDownloadData4a').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE[0]}', 'Point Care Plot Single 1')`);
+                        $('#buttonDownloadData4b').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE[1]}', 'Point Care Plot Single 2')`);
+                        $('#buttonDownloadData4c').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE[2]}', 'Point Care Plot Single 3')`);
                         console.log(GLOBAL_VARIABLE_DATA_CEK_PEAK);
                         console.log(GLOBAL_VARIABLE_DATA_PEAK_DETECTION);
                         console.log(GLOBAL_VARIABLE_DATA_PLOT_RRI);
