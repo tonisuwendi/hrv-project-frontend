@@ -63,7 +63,7 @@
 }
 
 .content {
-    margin-top: 50px;
+    margin-top: 70px !important;
     margin: auto;
 }
 
@@ -155,7 +155,7 @@
     }
 
     .content {
-        margin-top: 130px;
+        margin-top: 150px !important;
     }
 
     .content .main-title {
@@ -204,6 +204,22 @@
         width: 90%;
     }
 
+    .single-input-responsive {
+        display: block !important;
+    }
+
+    .single-input-responsive button {
+        margin-top: 10px;
+    }
+
+    .multi-input-responsive {
+        display: block !important;
+    }
+
+    .multi-input-responsive .custom-file {
+        margin-bottom: 10px;
+    }
+
 }
 
 .lds-hourglass {
@@ -242,4 +258,14 @@
     100% {
         transform: rotate(1800deg);
     }
+}
+
+.loading-screen {
+    background: rgba(255, 255, 255, 0.3);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: none;
+    z-index: 9;
 }

@@ -29,7 +29,7 @@
                 <a href="/help.html" class="menu-item">Help</a>
                 <a href="/logout.html" class="menu-item text-warning">Logout</a>
             </div>
-            <span class="greeting">Halo,Selamat datang User!</span>
+            <span class="greeting">Halo,Selamat datang <span id="loginName"></span>!</span>
         </div>
 
         <div class="content">
@@ -97,6 +97,7 @@
                 if (!response.success) {
                     window.location.href = '/login.html';
                 }
+                $("#loginName").text(response.name);
             },
             error: function () {
                 window.location.href = '/login.html';

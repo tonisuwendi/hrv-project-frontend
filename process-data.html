@@ -17,6 +17,8 @@
 
 <body>
 
+    <div class="loading-screen"></div>
+
     <div class="wrapper pb-5">
         <img src="images/logo.png" alt="logo HRV" class="navbar-brand logo-hrv">
         <div class="section-top-right">
@@ -27,7 +29,7 @@
                 <a href="/help.html" class="menu-item">Help</a>
                 <a href="/logout.html" class="menu-item text-warning">Logout</a>
             </div>
-            <span class="greeting">Halo,Selamat datang User!</span>
+            <span class="greeting">Halo,Selamat datang <span id="loginName"></span>!</span>
         </div>
 
         <div class="content">
@@ -74,7 +76,7 @@
                     </li>
                 </ul>
                 <div class="card-body" id="proccessWrapperSingleData">
-                    <div class="d-flex">
+                    <div class="d-flex single-input-responsive">
                         <div class="input-group mr-3" style="width: 300px;">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="inputFile" required>
@@ -121,12 +123,12 @@
                     <div class="footer-content mt-4">
                         <div></div>
                         <div class="footer-button">
-                            <button class="btn button-grey-custom">SIMPAN SEMUA</button>
+                            <a href="" class="btn button-grey-custom" id="downloadAllSingleButton">SIMPAN SEMUA</a>
                         </div>
                     </div>
                 </div>
                 <div class="card-body" id="proccessWrapperMultiData">
-                    <div class="d-flex">
+                    <div class="d-flex multi-input-responsive">
                         <div class="input-group mr-3" style="width: 300px;">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="inputFilePre" required>
@@ -243,7 +245,7 @@
                     <div class="footer-content mt-4">
                         <div></div>
                         <div class="footer-button">
-                            <button class="btn button-grey-custom">SIMPAN SEMUA</button>
+                            <button class="btn button-grey-custom" id="downloadAllMultiButton">SIMPAN SEMUA</button>
                         </div>
                     </div>
                 </div>
@@ -281,6 +283,7 @@
                 if (!response.success) {
                     window.location.href = '/login.html';
                 }
+                $("#loginName").text(response.name);
             },
             error: function () {
                 window.location.href = '/login.html';
@@ -290,6 +293,7 @@
         // process data
 
         let globalVariableDataType = 'single';
+        const globalVariableRandomString = generateRandomString(35) + Date.now();
         const GLOBAL_VARIABLE_INPUT_MULTIPLE_FILE = [$("#inputFileOn").prop('files')[0], $("#inputFilePost").prop('files')[0]];
         const GLOBAL_VARIABLE_DATA_CEK_PEAK = [];
         const GLOBAL_VARIABLE_DATA_PEAK_DETECTION = [];
@@ -300,6 +304,7 @@
         const GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI = [];
         const GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE = [];
         const GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT = [];
+        const GLOBAL_VARIABLE_DOWNLOAD_ALL = [];
 
         function changeDataType(type) {
             globalVariableDataType = type;
@@ -316,24 +321,54 @@
         }
 
         function handleSubmitData() {
-            $(".buttonProccess").prop('disabled', true);
-            $(".buttonProccess").text('Loading...');
-
             const name = $("#name").val();
             const age = $("#age").val();
             const gender = $("#gender").val();
             const inputFile = $("#inputFile").prop('files')[0];
             const inputFilePre = $("#inputFilePre").prop('files')[0];
+            const inputFileOn = $("#inputFileOn").prop('files')[0];
+            const inputFilePost = $("#inputFilePost").prop('files')[0];
+
+            if (name === '' || age === '' || !gender) {
+                swal({
+                    text: 'Pastikan nama, umur, dan gender sudah diisi',
+                    icon: 'error',
+                });
+                return;
+            }
 
             const formData = new FormData();
             formData.append('name', name);
             formData.append('age', age);
             formData.append('gender', gender);
             if (globalVariableDataType === 'single') {
+                if (!inputFile) {
+                    swal({
+                        text: 'Masukkan file terlebih dahulu',
+                        icon: 'error',
+                    });
+                    return;
+                }
+                $(".buttonProccess").prop('disabled', true);
+                $(".buttonProccess").text('Loading...');
+                $(".loading-screen").show('fast');
                 formData.append('file', inputFile);
+                formData.append('type', 1);
+                formData.append('order', '');
+                formData.append('random_string', globalVariableRandomString);
                 handleSubmitSingleData(formData);
             } else {
-                handleSubmitMultiData(name, age, gender, inputFilePre);
+                if (!inputFilePre || !inputFileOn || !inputFilePost) {
+                    swal({
+                        text: 'Masukkan file Pre, On, dan Post terlebih dahulu',
+                        icon: 'error',
+                    });
+                    return;
+                }
+                $(".buttonProccess").prop('disabled', true);
+                $(".buttonProccess").text('Loading...');
+                $(".loading-screen").show('fast');
+                handleSubmitMultiData(name, age, gender, inputFilePre, 1);
             }
         }
 
@@ -348,6 +383,7 @@
                 success: function (response) {
                     $(".buttonProccess").prop('disabled', false);
                     $(".buttonProccess").text('PROSES');
+                    $(".loading-screen").hide('fast');
                     if (response.success) {
                         $(".alertInfoBeforeInputFile").hide();
                         $(".normalPeak").show();
@@ -360,6 +396,7 @@
                         $("#buttonDownloadData3").attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${response.filePlotRri}', 'Plot Rri')`);
                         $("#buttonDownloadData3b").prop('href', `https://212e-182-253-183-58.ap.ngrok.io/${response.rrResult}`);
                         $("#buttonDownloadData4").attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${response.filePointCarePlot}', 'Point Care Plot Single')`);
+                        $("#downloadAllSingleButton").prop('href', `https://212e-182-253-183-58.ap.ngrok.io/${response.zipFiles}`);
                     } else {
                         swal({
                             text: response.msg,
@@ -370,12 +407,15 @@
             })
         }
 
-        function handleSubmitMultiData(name, age, gender, file) {
+        function handleSubmitMultiData(name, age, gender, file, order) {
             const formData = new FormData();
             formData.append('name', name);
             formData.append('age', age);
             formData.append('gender', gender);
             formData.append('file', file);
+            formData.append('type', 2);
+            formData.append('order', order);
+            formData.append('random_string', globalVariableRandomString);
             $.ajax({
                 url: 'https://212e-182-253-183-58.ap.ngrok.io/upload',
                 method: 'POST',
@@ -384,22 +424,24 @@
                 processData: false,
                 dataType: 'json',
                 success: function (response) {
+                    GLOBAL_VARIABLE_DATA_CEK_PEAK.push(response.pCeak);
+                    GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK.push(response.fileCeakPeak);
+                    GLOBAL_VARIABLE_DATA_PEAK_DETECTION.push(response.pDetection);
+                    GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION.push(response.filePeakDetection);
+                    GLOBAL_VARIABLE_DATA_PLOT_RRI.push(response.pRri);
+                    GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI.push(response.filePlotRri);
+                    GLOBAL_VARIABLE_DATA_POINT_CARE.push(response.pSingle);
+                    GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE.push(response.filePointCarePlot);
+                    GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT.push(response.rrResult);
+                    GLOBAL_VARIABLE_DOWNLOAD_ALL.push(response.zipFiles);
                     if (GLOBAL_VARIABLE_DATA_CEK_PEAK.length < 3) {
-                        GLOBAL_VARIABLE_DATA_CEK_PEAK.push(response.pCeak);
-                        GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK.push(response.fileCeakPeak);
-                        GLOBAL_VARIABLE_DATA_PEAK_DETECTION.push(response.pDetection);
-                        GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION.push(response.filePeakDetection);
-                        GLOBAL_VARIABLE_DATA_PLOT_RRI.push(response.pRri);
-                        GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI.push(response.filePlotRri);
-                        GLOBAL_VARIABLE_DATA_POINT_CARE.push(response.pSingle);
-                        GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE.push(response.filePointCarePlot);
-                        GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT.push(response.rrResult);
                         if (GLOBAL_VARIABLE_DATA_CEK_PEAK.length === 1) {
-                            handleSubmitData(name, age, gender, $("#inputFileOn").prop('files')[0]);
-                        } else {
-                            handleSubmitData(name, age, gender, $("#inputFilePost").prop('files')[0]);
+                            handleSubmitMultiData(name, age, gender, $("#inputFileOn").prop('files')[0], 2);
+                        } else if (GLOBAL_VARIABLE_DATA_CEK_PEAK.length === 2) {
+                            handleSubmitMultiData(name, age, gender, $("#inputFilePost").prop('files')[0], 3);
                         }
                     } else {
+                        $(".loading-screen").hide('fast');
                         $(".buttonProccess").prop('disabled', false);
                         $(".buttonProccess").text('PROSES');
                         $(".alertInfoBeforeInputFile").hide();
@@ -453,6 +495,21 @@
             document.body.removeChild(link)
         }
 
+        $("#downloadAllMultiButton").on('click', function(){
+            window.open(`https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_ALL[0]}`);
+            window.open(`https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_ALL[1]}`);
+            window.open(`https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_ALL[2]}`);
+        })
+
+        function generateRandomString(length) {
+            let result = '';
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const charactersLength = characters.length;
+            for ( let i = 0; i < length; i++ ) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
 
     </script>
 
