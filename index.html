@@ -24,7 +24,6 @@
                 <a href="/" class="menu-item font-weight-bold">Home</a>
                 <a href="/process-data.html" class="menu-item">Proses Data</a>
                 <a href="/search.html" class="menu-item">Cari Data</a>
-                <a href="/help.html" class="menu-item">Help</a>
                 <a href="/logout.html" class="menu-item text-warning">Logout</a>
             </div>
         </div>
@@ -53,7 +52,7 @@
         }
 
         $.ajax({
-            url: 'https://0dd6-182-1-99-104.ap.ngrok.io/hrvbe/verify_token.php',
+            url: 'https://0a5a-182-1-64-21.ap.ngrok.io/hrvbe/verify_token.php',
             method: 'POST',
             data: JSON.stringify({
                 token: `Bearer ${tokenStorage}`,

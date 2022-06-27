@@ -26,7 +26,6 @@
                 <a href="/" class="menu-item">Home</a>
                 <a href="/process-data.html" class="menu-item font-weight-bold">Proses Data</a>
                 <a href="/search.html" class="menu-item">Cari Data</a>
-                <a href="/help.html" class="menu-item">Help</a>
                 <a href="/logout.html" class="menu-item text-warning">Logout</a>
             </div>
             <span class="greeting">Halo,Selamat datang <span id="loginName"></span>!</span>
@@ -123,7 +122,8 @@
                     <div class="footer-content mt-4">
                         <div></div>
                         <div class="footer-button">
-                            <a href="" class="btn button-grey-custom" id="downloadAllSingleButton">SIMPAN SEMUA</a>
+                            <a href="" class="btn button-grey-custom" id="downloadAllSingleButton">DOWNLOAD SEMUA</a>
+                            <button onclick="handleSubmitData(false)" type="button" class="btn btn-info" id="saveAllToDatabaseSingleButton">SIMPAN KE DATABASE</button>
                         </div>
                     </div>
                 </div>
@@ -226,26 +226,29 @@
                         <br />
                         <br />
                         <hr />
-                        <div>
-                            <h4 class="text-center">Point Care Plot Single 1 atau nama datanya</h4>
-                            <div id="data4a"></div>
-                            <button id="buttonDownloadData4a" class="btn btn-secondary">Download</button>
-                        </div>
-                        <div>
-                            <h4 class="text-center">Point Care Plot Single 2 atau nama datanya</h4>
-                            <div id="data4b"></div>
-                            <button id="buttonDownloadData4b" class="btn btn-secondary">Download</button>
-                        </div>
-                        <div>
-                            <h4 class="text-center">Point Care Plot Single 3 atau nama datanya</h4>
-                            <div id="data4c"></div>
-                            <button id="buttonDownloadData4c" class="btn btn-secondary">Download</button>
+                        <div class="point-care-plot-wrapper">
+                            <div>
+                                <h4 class="text-center">Point Care Plot Single 1 atau nama datanya</h4>
+                                <div id="data4a"></div>
+                                <button id="buttonDownloadData4a" class="btn btn-secondary">Download</button>
+                            </div>
+                            <div>
+                                <h4 class="text-center">Point Care Plot Single 2 atau nama datanya</h4>
+                                <div id="data4b"></div>
+                                <button id="buttonDownloadData4b" class="btn btn-secondary">Download</button>
+                            </div>
+                            <div>
+                                <h4 class="text-center">Point Care Plot Single 3 atau nama datanya</h4>
+                                <div id="data4c"></div>
+                                <button id="buttonDownloadData4c" class="btn btn-secondary">Download</button>
+                            </div>
                         </div>
                     </div>
                     <div class="footer-content mt-4">
                         <div></div>
                         <div class="footer-button">
-                            <button class="btn button-grey-custom" id="downloadAllMultiButton">SIMPAN SEMUA</button>
+                            <button class="btn button-grey-custom" id="downloadAllMultiButton">DOWNLOAD SEMUA</button>
+                            <button onclick="handleSubmitData(false)" type="button" class="btn btn-info" id="saveAllToDatabaseMultiButton">SIMPAN KE DATABASE</button>
                         </div>
                     </div>
                 </div>
@@ -273,7 +276,7 @@
         }
 
         $.ajax({
-            url: 'https://0dd6-182-1-99-104.ap.ngrok.io/hrvbe/verify_token.php',
+            url: 'https://0a5a-182-1-64-21.ap.ngrok.io/hrvbe/verify_token.php',
             method: 'POST',
             data: JSON.stringify({
                 token: `Bearer ${tokenStorage}`,
@@ -295,16 +298,16 @@
         let globalVariableDataType = 'single';
         const globalVariableRandomString = generateRandomString(35) + Date.now();
         const GLOBAL_VARIABLE_INPUT_MULTIPLE_FILE = [$("#inputFileOn").prop('files')[0], $("#inputFilePost").prop('files')[0]];
-        const GLOBAL_VARIABLE_DATA_CEK_PEAK = [];
-        const GLOBAL_VARIABLE_DATA_PEAK_DETECTION = [];
-        const GLOBAL_VARIABLE_DATA_PLOT_RRI = [];
-        const GLOBAL_VARIABLE_DATA_POINT_CARE = [];
-        const GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK = [];
-        const GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION = [];
-        const GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI = [];
-        const GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE = [];
-        const GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT = [];
-        const GLOBAL_VARIABLE_DOWNLOAD_ALL = [];
+        let GLOBAL_VARIABLE_DATA_CEK_PEAK = [];
+        let GLOBAL_VARIABLE_DATA_PEAK_DETECTION = [];
+        let GLOBAL_VARIABLE_DATA_PLOT_RRI = [];
+        let GLOBAL_VARIABLE_DATA_POINT_CARE = [];
+        let GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK = [];
+        let GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION = [];
+        let GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI = [];
+        let GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE = [];
+        let GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT = [];
+        let GLOBAL_VARIABLE_DOWNLOAD_ALL = [];
 
         function changeDataType(type) {
             globalVariableDataType = type;
@@ -320,7 +323,18 @@
             }
         }
 
-        function handleSubmitData() {
+        function handleSubmitData(is_upload = true) {
+            GLOBAL_VARIABLE_DATA_CEK_PEAK = [];
+            GLOBAL_VARIABLE_DATA_PEAK_DETECTION = [];
+            GLOBAL_VARIABLE_DATA_PLOT_RRI = [];
+            GLOBAL_VARIABLE_DATA_POINT_CARE = [];
+            GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK = [];
+            GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION = [];
+            GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI = [];
+            GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE = [];
+            GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT = [];
+            GLOBAL_VARIABLE_DOWNLOAD_ALL = [];
+
             const name = $("#name").val();
             const age = $("#age").val();
             const gender = $("#gender").val();
@@ -356,7 +370,7 @@
                 formData.append('type', 1);
                 formData.append('order', '');
                 formData.append('random_string', globalVariableRandomString);
-                handleSubmitSingleData(formData);
+                handleSubmitSingleData(formData, is_upload);
             } else {
                 if (!inputFilePre || !inputFileOn || !inputFilePost) {
                     swal({
@@ -368,13 +382,13 @@
                 $(".buttonProccess").prop('disabled', true);
                 $(".buttonProccess").text('Loading...');
                 $(".loading-screen").show('fast');
-                handleSubmitMultiData(name, age, gender, inputFilePre, 1);
+                handleSubmitMultiData(is_upload, name, age, gender, inputFilePre, 1);
             }
         }
 
-        function handleSubmitSingleData(formData) {
+        function handleSubmitSingleData(formData, is_upload = true) {
             $.ajax({
-                url: 'https://212e-182-253-183-58.ap.ngrok.io/upload',
+                url: `https://0769-182-253-183-7.ap.ngrok.io/${is_upload ? 'upload' : 'simpan'}`,
                 method: 'POST',
                 data: formData,
                 contentType: false,
@@ -385,18 +399,26 @@
                     $(".buttonProccess").text('PROSES');
                     $(".loading-screen").hide('fast');
                     if (response.success) {
+                        if (!is_upload) {
+                            swal({
+                                text: 'Berhasil menyimpan ke database.',
+                                icon: 'success',
+                            });
+                        }
+                        $("#downloadAllSingleButton").show();
+                        $("#saveAllToDatabaseSingleButton").show();
                         $(".alertInfoBeforeInputFile").hide();
                         $(".normalPeak").show();
                         $('#data1').html(response.pCeak);
                         $('#data2').html(response.pDetection);
                         $('#data3').html(response.pRri);
                         $('#data4').html(response.pSingle);
-                        $("#buttonDownloadData1").attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${response.fileCeakPeak}', 'Cek Peak')`);
-                        $("#buttonDownloadData2").attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${response.filePeakDetection}', 'Peak Detection')`);
-                        $("#buttonDownloadData3").attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${response.filePlotRri}', 'Plot Rri')`);
-                        $("#buttonDownloadData3b").prop('href', `https://212e-182-253-183-58.ap.ngrok.io/${response.rrResult}`);
-                        $("#buttonDownloadData4").attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${response.filePointCarePlot}', 'Point Care Plot Single')`);
-                        $("#downloadAllSingleButton").prop('href', `https://212e-182-253-183-58.ap.ngrok.io/${response.zipFiles}`);
+                        $("#buttonDownloadData1").attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${response.fileCeakPeak}', 'Cek Peak')`);
+                        $("#buttonDownloadData2").attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${response.filePeakDetection}', 'Peak Detection')`);
+                        $("#buttonDownloadData3").attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${response.filePlotRri}', 'Plot Rri')`);
+                        $("#buttonDownloadData3b").prop('href', `https://0769-182-253-183-7.ap.ngrok.io/${response.rrResult}`);
+                        $("#buttonDownloadData4").attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${response.filePointCarePlot}', 'Point Care Plot Single')`);
+                        $("#downloadAllSingleButton").prop('href', `https://0769-182-253-183-7.ap.ngrok.io/${response.zipFiles}`);
                     } else {
                         swal({
                             text: response.msg,
@@ -407,7 +429,7 @@
             })
         }
 
-        function handleSubmitMultiData(name, age, gender, file, order) {
+        function handleSubmitMultiData(is_upload, name, age, gender, file, order) {
             const formData = new FormData();
             formData.append('name', name);
             formData.append('age', age);
@@ -417,7 +439,7 @@
             formData.append('order', order);
             formData.append('random_string', globalVariableRandomString);
             $.ajax({
-                url: 'https://212e-182-253-183-58.ap.ngrok.io/upload',
+                url: `https://0769-182-253-183-7.ap.ngrok.io/${is_upload ? 'upload' : 'simpan'}`,
                 method: 'POST',
                 data: formData,
                 contentType: false,
@@ -436,11 +458,19 @@
                     GLOBAL_VARIABLE_DOWNLOAD_ALL.push(response.zipFiles);
                     if (GLOBAL_VARIABLE_DATA_CEK_PEAK.length < 3) {
                         if (GLOBAL_VARIABLE_DATA_CEK_PEAK.length === 1) {
-                            handleSubmitMultiData(name, age, gender, $("#inputFileOn").prop('files')[0], 2);
+                            handleSubmitMultiData(is_upload, name, age, gender, $("#inputFileOn").prop('files')[0], 2);
                         } else if (GLOBAL_VARIABLE_DATA_CEK_PEAK.length === 2) {
-                            handleSubmitMultiData(name, age, gender, $("#inputFilePost").prop('files')[0], 3);
+                            handleSubmitMultiData(is_upload, name, age, gender, $("#inputFilePost").prop('files')[0], 3);
                         }
                     } else {
+                        if (!is_upload) {
+                            swal({
+                                text: 'Berhasil menyimpan ke database.',
+                                icon: 'success',
+                            });
+                        }
+                        $("#downloadAllMultiButton").show();
+                        $("#saveAllToDatabaseMultiButton").show();
                         $(".loading-screen").hide('fast');
                         $(".buttonProccess").prop('disabled', false);
                         $(".buttonProccess").text('PROSES');
@@ -458,21 +488,21 @@
                         $('#data4a').html(GLOBAL_VARIABLE_DATA_POINT_CARE[0]);
                         $('#data4b').html(GLOBAL_VARIABLE_DATA_POINT_CARE[1]);
                         $('#data4c').html(GLOBAL_VARIABLE_DATA_POINT_CARE[2]);
-                        $('#buttonDownloadData1a').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK[0]}', 'Cek Peak 1')`);
-                        $('#buttonDownloadData1b').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK[1]}', 'Cek Peak 2')`);
-                        $('#buttonDownloadData1c').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK[2]}', 'Cek Peak 3')`);
-                        $('#buttonDownloadData2a').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION[0]}', 'Peak Detection 1')`);
-                        $('#buttonDownloadData2b').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION[1]}', 'Peak Detection 2')`);
-                        $('#buttonDownloadData2c').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION[2]}', 'Peak Detection 3')`);
-                        $('#buttonDownloadData3a1').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI[0]}', 'Plot Rri 1')`);
-                        $("#buttonDownloadData3a2").prop('href', `https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT[0]}`);
-                        $('#buttonDownloadData3b1').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI[1]}', 'Plot Rri 2')`);
-                        $("#buttonDownloadData3b2").prop('href', `https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT[1]}`);
-                        $('#buttonDownloadData3c1').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI[2]}', 'Plot Rri 3')`);
-                        $("#buttonDownloadData3c2").prop('href', `https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT[2]}`);
-                        $('#buttonDownloadData4a').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE[0]}', 'Point Care Plot Single 1')`);
-                        $('#buttonDownloadData4b').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE[1]}', 'Point Care Plot Single 2')`);
-                        $('#buttonDownloadData4c').attr('onclick', `downloadImage('https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE[2]}', 'Point Care Plot Single 3')`);
+                        $('#buttonDownloadData1a').attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK[0]}', 'Cek Peak 1')`);
+                        $('#buttonDownloadData1b').attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK[1]}', 'Cek Peak 2')`);
+                        $('#buttonDownloadData1c').attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_CEK_PEAK[2]}', 'Cek Peak 3')`);
+                        $('#buttonDownloadData2a').attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION[0]}', 'Peak Detection 1')`);
+                        $('#buttonDownloadData2b').attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION[1]}', 'Peak Detection 2')`);
+                        $('#buttonDownloadData2c').attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PEAK_DETECTION[2]}', 'Peak Detection 3')`);
+                        $('#buttonDownloadData3a1').attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI[0]}', 'Plot Rri 1')`);
+                        $("#buttonDownloadData3a2").prop('href', `https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT[0]}`);
+                        $('#buttonDownloadData3b1').attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI[1]}', 'Plot Rri 2')`);
+                        $("#buttonDownloadData3b2").prop('href', `https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT[1]}`);
+                        $('#buttonDownloadData3c1').attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_PLOT_RRI[2]}', 'Plot Rri 3')`);
+                        $("#buttonDownloadData3c2").prop('href', `https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_RR_RESULT[2]}`);
+                        $('#buttonDownloadData4a').attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE[0]}', 'Point Care Plot Single 1')`);
+                        $('#buttonDownloadData4b').attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE[1]}', 'Point Care Plot Single 2')`);
+                        $('#buttonDownloadData4c').attr('onclick', `downloadImage('https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_POINT_CARE[2]}', 'Point Care Plot Single 3')`);
                         console.log(GLOBAL_VARIABLE_DATA_CEK_PEAK);
                         console.log(GLOBAL_VARIABLE_DATA_PEAK_DETECTION);
                         console.log(GLOBAL_VARIABLE_DATA_PLOT_RRI);
@@ -496,9 +526,9 @@
         }
 
         $("#downloadAllMultiButton").on('click', function(){
-            window.open(`https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_ALL[0]}`);
-            window.open(`https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_ALL[1]}`);
-            window.open(`https://212e-182-253-183-58.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_ALL[2]}`);
+            window.open(`https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_ALL[0]}`);
+            window.open(`https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_ALL[1]}`);
+            window.open(`https://0769-182-253-183-7.ap.ngrok.io/${GLOBAL_VARIABLE_DOWNLOAD_ALL[2]}`);
         })
 
         function generateRandomString(length) {

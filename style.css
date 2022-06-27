@@ -269,3 +269,14 @@
     display: none;
     z-index: 9;
 }
+
+.point-care-plot-wrapper {
+    display: flex;
+}
+
+#downloadAllSingleButton,
+#downloadAllMultiButton,
+#saveAllToDatabaseSingleButton,
+#saveAllToDatabaseMultiButton {
+    display: none;
+}

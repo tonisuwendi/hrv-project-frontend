@@ -26,7 +26,6 @@
                 <a href="/" class="menu-item">Home</a>
                 <a href="/process-data.html" class="menu-item">Proses Data</a>
                 <a href="/search.html" class="menu-item font-weight-bold">Cari Data</a>
-                <a href="/help.html" class="menu-item">Help</a>
                 <a href="/logout.html" class="menu-item text-warning">Logout</a>
             </div>
             <span class="greeting">Halo,Selamat datang <span id="loginName"></span>!</span>
@@ -87,7 +86,7 @@
         }
 
         $.ajax({
-            url: 'https://0dd6-182-1-99-104.ap.ngrok.io/hrvbe/verify_token.php',
+            url: 'https://0a5a-182-1-64-21.ap.ngrok.io/hrvbe/verify_token.php',
             method: 'POST',
             data: JSON.stringify({
                 token: `Bearer ${tokenStorage}`,
@@ -104,16 +103,24 @@
             }
         })
 
+        handleSearchData(true);
+
         $("#btnSearch").on('click', function () {
+            handleSearchData();
+        })
+
+        function handleSearchData(isPageLoaded = false) {
             $("#btnSearch").prop('disabled', true);
             const value = $("#search").val();
-            if (value.trim() == "") {
+
+            if (!isPageLoaded && value.trim() == "") {
                 return;
             }
+
             $(".lds-hourglass").removeClass('d-none');
 
             $.ajax({
-                url: `https://0dd6-182-1-99-104.ap.ngrok.io/hrvbe/search.php?keyword=${value}`,
+                url: `https://0a5a-182-1-64-21.ap.ngrok.io/hrvbe/search.php?keyword=${value}`,
                 method: 'GET',
                 dataType: 'json',
                 success: function (response) {
@@ -134,7 +141,7 @@
                                     <td>${data.age}</td>
                                     <td>${data.gender}</td>
                                     <td>${dateFormatted}</td>
-                                    <td><button class="btn button-green btn-sm px-3">Lihat</button></td>
+                                    <td><a href="https://0769-182-253-183-7.ap.ngrok.io/${data.rr_result}" class="btn button-green btn-sm px-3">Download Rri</a></td>
                                     </tr>`;
                             });
                             $("#resultBody").html(resultHtml);
@@ -150,7 +157,7 @@
                     }, 1000);
                 },
             })
-        })
+        }
 
 
     </script>
